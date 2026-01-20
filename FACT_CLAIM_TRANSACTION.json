@@ -1,8 +1,8 @@
 {
   "name": "FACT_CLAIM_TRANSACTION",
-  "nodeType": "FACT",
-  "description": "Migrated from SSIS Package: EDW_CC_Load_FactClaimTransaction.dtsx. Loads claim transaction facts with dimensional lookups.",
-  "location": "TARGET_SCHEMA",
+  "nodeType": "Table", 
+  "description": "Migrated from SSIS Package",
+  "location": "Target",
   "materializationType": "TABLE",
   "join": {
     "on": "1 = 1",
@@ -13,70 +13,6 @@
           "node": "STG_GUIDEWIRE_TRANSACTIONS",
           "alias": "SRC"
         }
-      },
-      {
-        "joinType": "LEFT OUTER",
-        "table": {
-          "node": "DIM_ACCOUNT",
-          "alias": "LKP_ACC"
-        },
-        "on": "SRC.AccountNumber = LKP_ACC.AccountNumber"
-      },
-      {
-        "joinType": "LEFT OUTER",
-        "table": {
-          "node": "DIM_AGENCY",
-          "alias": "LKP_AGY"
-        },
-        "on": "SRC.AgencyName = LKP_AGY.AgencyName"
-      },
-      {
-        "joinType": "LEFT OUTER",
-        "table": {
-          "node": "DIM_CLAIM",
-          "alias": "LKP_CLM"
-        },
-        "on": "SRC.publicid = LKP_CLM.publicid"
-      },
-      {
-        "joinType": "LEFT OUTER",
-        "table": {
-          "node": "DIM_POLICY",
-          "alias": "LKP_POL"
-        },
-        "on": "SRC.GWRowNumber = LKP_POL.GWRowNumber"
-      },
-      {
-        "joinType": "LEFT OUTER",
-        "table": {
-          "node": "DIM_DATE",
-          "alias": "LKP_LOSSDATE"
-        },
-        "on": "SRC.LossDate = LKP_LOSSDATE.Date"
-      },
-      {
-        "joinType": "LEFT OUTER",
-        "table": {
-          "node": "DIM_DATE",
-          "alias": "LKP_TRXDATE"
-        },
-        "on": "SRC.TransactionDate = LKP_TRXDATE.Date"
-      },
-      {
-        "joinType": "LEFT OUTER",
-        "table": {
-          "node": "DIM_PRODUCER",
-          "alias": "LKP_PROD"
-        },
-        "on": "SRC.ProducerCode = LKP_PROD.ProducerCode"
-      },
-      {
-        "joinType": "LEFT OUTER",
-        "table": {
-          "node": "DIM_USER",
-          "alias": "LKP_USER"
-        },
-        "on": "SRC.CreateUserID = LKP_USER.UserID"
       }
     ]
   },
@@ -85,129 +21,14 @@
       "name": "GWRowNumber",
       "dataType": "NUMBER",
       "defaultValue": "",
-      "description": "Business Key from Source",
+      "description": "Business Key",
       "nullable": false,
       "source": {
         "name": "GWRowNumber",
         "transform": "SRC.GWRowNumber",
-        "references": [
-          "SRC"
-        ]
+        "references": ["SRC"]
       },
-      "businessKey": true,
-      "surrogateKey": false
-    },
-    {
-      "name": "BeanVersion",
-      "dataType": "VARCHAR",
-      "defaultValue": "",
-      "description": "Change Tracking Field (from Conditional Split)",
-      "nullable": true,
-      "source": {
-        "name": "BeanVersion",
-        "transform": "SRC.BeanVersion",
-        "references": [
-          "SRC"
-        ]
-      },
-      "businessKey": false,
-      "surrogateKey": false
-    },
-    {
-      "name": "AccountID",
-      "dataType": "NUMBER",
-      "defaultValue": "-1",
-      "description": "Surrogate Key from DIM_ACCOUNT",
-      "nullable": true,
-      "source": {
-        "name": "AccountID",
-        "transform": "COALESCE(LKP_ACC.AccountID, -1)",
-        "references": [
-          "LKP_ACC"
-        ]
-      }
-    },
-    {
-      "name": "AgencyID",
-      "dataType": "NUMBER",
-      "defaultValue": "-1",
-      "description": "Surrogate Key from DIM_AGENCY",
-      "nullable": true,
-      "source": {
-        "name": "AgencyID",
-        "transform": "COALESCE(LKP_AGY.AgencyID, -1)",
-        "references": [
-          "LKP_AGY"
-        ]
-      }
-    },
-    {
-      "name": "ClaimID",
-      "dataType": "NUMBER",
-      "defaultValue": "-1",
-      "description": "Surrogate Key from DIM_CLAIM",
-      "nullable": true,
-      "source": {
-        "name": "ClaimID",
-        "transform": "COALESCE(LKP_CLM.ClaimID, -1)",
-        "references": [
-          "LKP_CLM"
-        ]
-      }
-    },
-    {
-      "name": "PolicyID",
-      "dataType": "NUMBER",
-      "defaultValue": "-1",
-      "description": "Transformed from SSIS Expression: ISNULL(PolicyID) ? -1 : PolicyID",
-      "nullable": true,
-      "source": {
-        "name": "PolicyID",
-        "transform": "COALESCE(LKP_POL.PolicyID, -1)",
-        "references": [
-          "LKP_POL"
-        ]
-      }
-    },
-    {
-      "name": "BatchID",
-      "dataType": "NUMBER",
-      "defaultValue": "0",
-      "description": "Replaces SSIS Variable @[User::BatchID]",
-      "nullable": true,
-      "source": {
-        "name": "BatchID",
-        "transform": "CURRENT_BATCH_ID()",
-        "references": []
-      }
-    },
-    {
-      "name": "TransactionAmount",
-      "dataType": "NUMBER(18,2)",
-      "defaultValue": "0",
-      "description": "",
-      "nullable": true,
-      "source": {
-        "name": "TransactionAmount",
-        "transform": "SRC.TransactionAmount",
-        "references": [
-          "SRC"
-        ]
-      }
-    },
-    {
-      "name": "TransactionCreateDate",
-      "dataType": "TIMESTAMP",
-      "defaultValue": "",
-      "description": "",
-      "nullable": true,
-      "source": {
-        "name": "TransactionCreateDate",
-        "transform": "SRC.TransactionCreateDate",
-        "references": [
-          "SRC"
-        ]
-      }
+      "businessKey": true
     }
   ]
 }
